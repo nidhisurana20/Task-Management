@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ledger — task board</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="board-header">
+    <div>
+      <h1>Ledger</h1>
+      <p class="subhead">A running record of what's open, in motion, and closed.</p>
+    </div>
+    <div class="header-tools">
+      <input type="search" id="search" placeholder="Search tasks…" />
+      <select id="priority-filter">
+        <option value="">All priorities</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+      <button id="export-btn" type="button">Export CSV</button>
+    </div>
+  </header>
+
+  <form id="task-form" class="entry-row">
+    <input type="text" id="title" placeholder="What needs doing?" required maxlength="120" />
+    <input type="text" id="description" placeholder="Details (optional)" maxlength="500" />
+    <select id="priority">
+      <option value="low">Low priority</option>
+      <option value="medium" selected>Medium priority</option>
+      <option value="high">High priority</option>
+    </select>
+    <input type="date" id="due_date" />
+    <button type="submit">Add entry</button>
+  </form>
+
+  <p id="form-error" class="form-error" hidden></p>
+  <div id="toast" class="toast" hidden></div>
+
+  <main class="board">
+    <section class="column" data-status="todo">
+      <h2>To do <span class="count" id="count-todo">0</span></h2>
+      <div class="card-list" id="list-todo"></div>
+    </section>
+
+    <section class="column" data-status="in_progress">
+      <h2>In progress <span class="count" id="count-in_progress">0</span></h2>
+      <div class="card-list" id="list-in_progress"></div>
+    </section>
+
+    <section class="column" data-status="done">
+      <h2>Done <span class="count" id="count-done">0</span></h2>
+      <div class="card-list" id="list-done"></div>
+    </section>
+  </main>
+
+  <aside class="stats-panel">
+    <h2>At a glance</h2>
+    <canvas id="stats-canvas" width="260" height="140"></canvas>
+    <p class="stats-caption" id="stats-caption"></p>
+  </aside>
+
+  <template id="card-template">
+    <article class="card" draggable="true">
+      <div class="card-top">
+        <span class="priority-dot"></span>
+        <h3 class="card-title"></h3>
+      </div>
+      <p class="card-desc"></p>
+      <p class="card-due"></p>
+      <div class="card-actions">
+        <button class="edit-btn" type="button">Edit</button>
+        <button class="delete-btn" type="button">Delete</button>
+      </div>
+    </article>
+  </template>
+
+  <div id="edit-modal" class="modal" hidden>
+    <div class="modal-box">
+      <h2>Edit entry</h2>
+      <form id="edit-form">
+        <input type="hidden" id="edit-id" />
+        <input type="text" id="edit-title" required maxlength="120" />
+        <input type="text" id="edit-description" maxlength="500" />
+        <select id="edit-status">
+          <option value="todo">To do</option>
+          <option value="in_progress">In progress</option>
+          <option value="done">Done</option>
+        </select>
+        <select id="edit-priority">
+          <option value="low">Low priority</option>
+          <option value="medium">Medium priority</option>
+          <option value="high">High priority</option>
+        </select>
+        <input type="date" id="edit-due_date" />
+        <div class="modal-actions">
+          <button type="button" id="cancel-edit">Cancel</button>
+          <button type="submit">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
